@@ -1,0 +1,35 @@
+#!/bin/bash
+
+echo "Welcome to the Builder's Guild"
+
+firstline=$(head -n 1 source/changelog.md)
+
+read -a splitfirstline <<< $firstline
+
+version=${splitfirstline[1]}
+
+echo "Currently building version:" $version
+
+echo "Continue? ('1' for yes, '0' for no)"
+read versioncontinue
+
+if [ $versioncontinue -eq 1 ]
+then
+	echo "Ok"
+  for filename in source/*
+  do
+  	if [ "$filename" == "source/secretinfo.md" ]
+  then
+    echo "Private file skipped"
+  else
+  	echo "Copying" $filename
+  fi
+  cp $filename ./build/
+  done
+  cd build
+  echo "Build version $version contains:"
+  ls 
+  cd ../
+else
+	echo "Please come back when you are ready"
+fi
